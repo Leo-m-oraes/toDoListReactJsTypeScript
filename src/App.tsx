@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import * as Components from './App.styles';
+import {Item} from './types/Item';
+import {ListItem} from './components/ListItem'
+import{ AddArea} from './components/AddArea';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+
+const App = () => {
+  
+  const [list, setList] = useState<Item[]>([]);
+    const [showCheckbox, setShowCheckbox] = useState<boolean>(false);
+ 
+
+  const handleAddTask = (taskName: string) =>{
+    setList([...list, {
+      id:list.length +1,
+      name:taskName,
+      done:false
+    }]);
+    setShowCheckbox(true);
+  }
+  function deleteTask(id: number) {
+    setList(list.filter(item => item.id !== id));
+  }
+
+return(
+  <Components.Container>
+   <Components.Area>
+     <Components.Header>Lista de Tarefas</Components.Header>
+
+      <AddArea  onEnter={handleAddTask}/>
+
+     {list.map((Item, index)=>(
+       <ListItem key={index} item={Item} onDelete={deleteTask} />
+     ))}
+   </Components.Area>
+  </Components.Container>
+
+  
+)
 }
 
-export default App;
+export default App
